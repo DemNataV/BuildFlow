@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактор Графа</title>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="controls">
+        <label for="fileInput" class="file-button primary">
+            Выбрать
+            <input type="file" id="fileInput" accept=".json" hidden>
+        </label>
+        <span id="fileName" class="file-name"></span>
+        <button id="saveButton" class="primary">Сохранить</button>
+        <button id="addActionButton">Добавить Действие</button>
+        <button id="addStateButton">Добавить Объект</button>
+        <button id="addLinkButton" class="success">+ Связь (1 → 2)</button>
+        <button id="runLayoutButton">Обновить компоновку</button>
+        <span class="hint">Сначала клик на <b>Источник</b>, затем на <b>Цель</b>. Удаление: <b>Del</b></span>
+    </div>
+
+    <div id="cy"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
