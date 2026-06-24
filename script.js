@@ -1,6 +1,17 @@
 let cy;
 let selectionOrder = []; // Очередь выбора узлов
 
+// ----------------------------------------------------------------
+// Интеграция опросника
+// ----------------------------------------------------------------
+window.addEventListener('DOMContentLoaded', () => {
+    QuestionnaireUI.start((answers, result) => {
+        QuestionnaireUI.destroy();
+        document.getElementById('graph-container').style.display = 'block';
+        renderGraphFromPlan(result);
+    });
+});
+
 const NODE_PADDING = 20;
 const TEXT_MAX_WIDTH = 120;
 const FONT_SIZE = 12;
@@ -46,9 +57,51 @@ function calcNodeSize(label) {
     };
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    renderGraph({ nodes: [], edges: [] });
-});
+// Быстрый старт с пустым графом — заменён на запуск опросника выше
+
+/**
+ * Преобразует результат BuildingPlanner в граф Cytoscape и отрисовывает его.
+ * Показывает сводку в панели управления.
+ */
+function renderGraphFromPlan(planResult) {
+    const { graph, summary, detailedPlan } = planResult;
+    const nodes = [];
+    const edges = [];
+    const ids = new Set();
+
+    const add = (id, type) => {
+        if (!ids.has(id)) {
+            nodes.push({ data: { id, label: id, type } });
+            ids.add(id);
+        }
+    };
+
+    for (const actionName of Object.keys(graph)) {
+        const g = graph[actionName];
+        add(actionName, 'action');
+        (g.init_states || []).forEach(s => {
+            add(s, 'state');
+            edges.push({ data: { id: `${s}->${actionName}`, source: s, target: actionName } });
+        });
+        (g.final_states || []).forEach(s => {
+            add(s, 'state');
+            edges.push({ data: { id: `${actionName}->${s}`, source: actionName, target: s } });
+        });
+    }
+
+    renderGraph({ nodes, edges });
+
+    // Сводка
+    const summaryBar = document.getElementById('summary-bar');
+    if (summaryBar) {
+        summaryBar.innerHTML = `
+            <span class="summary-item">⏱️ <b>${summary.total_time_days}</b> дней</span>
+            <span class="summary-item">💰 <b>${summary.total_cost_million_rub}</b> млн руб.</span>
+            <span class="summary-item">📋 Фаз: <b>${Object.keys(detailedPlan).length}</b></span>
+            <span class="summary-item">🔵 Действий: <b>${Object.keys(graph).length}</b></span>
+        `;
+    }
+}
 
 function renderGraph(elements) {
     // Предварительно рассчитываем размеры для каждого узла
@@ -224,6 +277,20 @@ document.getElementById('saveButton').addEventListener('click', () => {
 });
 
 document.getElementById('runLayoutButton').addEventListener('click', () => cy.layout({ name: 'dagre', rankDir: 'TB' }).run());
+
+// Кнопка «Новый проект» — возврат к опроснику
+document.getElementById('newProjectButton').addEventListener('click', () => {
+    if (cy) { cy.destroy(); cy = null; }
+    document.getElementById('graph-container').style.display = 'none';
+    document.getElementById('summary-bar').innerHTML = '';
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    QuestionnaireUI.start((answers, result) => {
+        QuestionnaireUI.destroy();
+        document.getElementById('graph-container').style.display = 'block';
+        renderGraphFromPlan(result);
+    });
+});
 
 document.addEventListener('keydown', (e) => {
     if ((e.key === 'Delete' || e.key === 'Backspace') && document.activeElement.tagName !== 'INPUT') {

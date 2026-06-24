@@ -9,3 +9,106 @@ button { padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; cursor:
 .file-button { position: relative; display: inline-block; padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; background: #007bff; color: white; }
 .file-button:hover { background: #0056b3; }
 .file-name { font-size: 14px; color: #666; padding: 0 10px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 1em; }
+
+/* --------------- Опросник --------------- */
+#questionnaire-panel {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+#questionnaire-panel h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+#questionnaire-steps {
+    min-height: 200px;
+    padding: 10px 0;
+}
+
+#questionnaire-steps label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #444;
+    font-size: 14px;
+}
+
+#questionnaire-steps select,
+#questionnaire-steps input[type="number"],
+#questionnaire-steps input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+#questionnaire-steps select:focus,
+#questionnaire-steps input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+}
+
+.q-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.q-nav button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.q-nav button.primary {
+    background: #007bff;
+    color: white;
+}
+.q-nav button.primary:hover {
+    background: #0056b3;
+}
+
+.q-nav button.secondary {
+    background: #e9ecef;
+    color: #333;
+}
+.q-nav button.secondary:hover {
+    background: #d4dae0;
+}
+
+/* --------------- Сводка --------------- */
+#summary-bar {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.summary-item {
+    background: #f0f8ff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #cce5ff;
+}
